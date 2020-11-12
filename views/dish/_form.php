@@ -16,11 +16,12 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
     <?php
+    // список моделей игредиентов для отображения в виде списка дропдаунов
     if (isset($listModelsIngredient))
         foreach ($listModelsIngredient as $key => $ingredient) {
             echo $form
                 // присваиваем индекс полю, т.к. здесь все обьекты с одинаковым и менем и атрибутом
-                ->field($ingredient, "ingredient_id[$key]", [])
+                ->field($ingredient, "ingredient_id[]")
                 ->dropDownList(
                     $list_ingredients_id_name,
                     //лайфхак - для режима UPDATE указываем какой параметр на до селектить

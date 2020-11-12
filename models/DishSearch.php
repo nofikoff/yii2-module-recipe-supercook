@@ -4,7 +4,6 @@ namespace app\modules\recipe\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\recipe\models\Dish;
 
 /**
  * DishSearch represents the model behind the search form of `app\modules\recipe\models\Dish`.
@@ -43,12 +42,12 @@ class DishSearch extends Dish
         $query = Dish::find();
 
         // add conditions that should always apply here
-
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);
 
         $this->load($params);
+
 
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
@@ -56,7 +55,7 @@ class DishSearch extends Dish
             return $dataProvider;
         }
 
-        // grid filtering conditions
+       // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
         ]);
@@ -64,6 +63,10 @@ class DishSearch extends Dish
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'photo', $this->photo]);
 
+
         return $dataProvider;
     }
+
+
+
 }

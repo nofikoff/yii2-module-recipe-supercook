@@ -11,7 +11,6 @@ $this->title = 'Dishes';
 $this->params['breadcrumbs'][] = ['label' => 'Recipe search', 'url' => ['/recipe']];
 $this->params['breadcrumbs'][] = $this->title;
 
-//Yii::$app->getModule('recipe')->params['max-number-ingredients-one-dish'];
 
 ?>
 <div class="dish-index">
@@ -22,7 +21,6 @@ $this->params['breadcrumbs'][] = $this->title;
         <?= Html::a('Create Dish', ['create'], ['class' => 'btn btn-success']) ?>
     </p>
 
-    <?php // echo $this->render('_search', ['model' => $searchModel]); ?>
 
     <?= GridView::widget([
         'dataProvider' => $dataProvider,
@@ -30,9 +28,31 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'name',
-            'photo',
+            [
+                'attribute' => 'name',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return "<a href='/recipe/dish/update?id=$model->id'>$model->name</a>";
+                },
+            ],
+
+
+            [
+                'attribute' => 'ingredients',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    $str = "";
+                    foreach ($model->ingredients as $ingredient) {
+                        $str .= "- " . $ingredient->name . " " . ($ingredient->status ? "" : "<span style='color: red'>отключен</span>") . "<br>";
+
+                    }
+                    return $str;
+                },
+                //                'contentOptions' => ['style' => 'min-width: 150px; max-width: 200px; '], // <-- right here
+                'filter' => $list_ingredients_id_name,
+
+            ],
+
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

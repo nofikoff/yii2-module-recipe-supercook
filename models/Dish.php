@@ -68,4 +68,5 @@ class Dish extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Ingredient::className(), ['id' => 'ingredient_id'])->viaTable('ingredient2dish', ['dish_id' => 'id']);
     }
+
 }

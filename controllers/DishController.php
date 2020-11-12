@@ -55,10 +55,13 @@ class DishController extends Controller
     {
         $searchModel = new DishSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $list_ingredients_id_name = ArrayHelper::map(Ingredient::find()->orderBy('name')->asArray()->all(), 'id', 'name');
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'list_ingredients_id_name' => $list_ingredients_id_name,
+
         ]);
     }
 
@@ -85,7 +88,7 @@ class DishController extends Controller
 
         $model = new Dish();
         // список моделей ингредиентов N штук по молчанию
-        for ($i = 0; $i < Yii::$app->getModule('recipe')->params['max-number-ingredients-one-dish']; $i++) {
+        for ($i = 0; $i < Yii::$app->getModule('recipe')->params['max_number_ingredients_one_dish']; $i++) {
             $listModelsIngredient[] = new Ingredient2dish();
         }
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
@@ -122,14 +125,15 @@ class DishController extends Controller
         $model = $this->findModel($id);
         // список моделей ингредиентов - только те что в наличии
 
-        // массив имеющихся
+        // массив имеющихся моделей игредиентов для данного блюда
         $listModelsIngredient = Ingredient2dish::find()->where(['dish_id' => $id])->All();
         $find = sizeof($listModelsIngredient);
         // список моделей ингредиентов N штук по молчанию пустых болванок
-        for ($i = 0; $i < (Yii::$app->getModule('recipe')->params['max-number-ingredients-one-dish'] - $find); $i++) {
+        for ($i = 0; $i < (Yii::$app->getModule('recipe')->params['max_number_ingredients_one_dish'] - $find); $i++) {
             $listModelsIngredient[] = new Ingredient2dish();
         }
 
+        // обработчик
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             // сбрасываем старые ингредиенты
             Yii::$app->db->createCommand("DELETE FROM `ingredient2dish` WHERE `dish_id` = " . $model->id)->execute();

@@ -28,7 +28,17 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             'name',
-            'photo',
+
+            [
+                'attribute' => 'status',
+                'format' => 'raw',
+                'value' => function ($model) {
+                    return $model->status ? "" : "<span style='color: red'>ОТКЛЮЧЕН</span>";
+                },
+                'filter' => [0 => 'отключен', 1 => 'включен'],
+
+            ],
+
 
             ['class' => 'yii\grid\ActionColumn'],
         ],

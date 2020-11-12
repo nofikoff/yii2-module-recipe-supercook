@@ -12,9 +12,14 @@ use yii\widgets\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
+
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
-<!--    --><?//= $form->field($model, 'photo')->textInput(['maxlength' => true]) ?>
+    <hr>
+    <?= $form->field($model, 'status')->checkbox()->label('Ingredient status affects dish status') ?>
+
+
+    <!--    --><?//= $form->field($model, 'photo')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>

@@ -31,6 +31,7 @@ class Ingredient extends \yii\db\ActiveRecord
     {
         return [
             [['name'], 'required'],
+            [['status'], 'integer'],
             [['name'], 'string', 'max' => 100],
             [['photo'], 'string', 'max' => 200],
             [['name'], 'unique'],
@@ -46,6 +47,7 @@ class Ingredient extends \yii\db\ActiveRecord
             'id' => 'ID',
             'name' => 'Name',
             'photo' => 'Photo',
+            'status' => 'Status',
         ];
     }
 
