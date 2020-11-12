@@ -33,8 +33,9 @@ $this->params['breadcrumbs'][] = ['label' => 'Recipe search', 'url' => ['/recipe
 
     <?php echo $this->render('_search',
         [
+            'queryParams' => $queryParams,
             'model' => $searchModel,
-            'oneIngredientModel' => $oneIngredientModel
+            'list_ingredients_id_name' => $list_ingredients_id_name
         ]);
 
 

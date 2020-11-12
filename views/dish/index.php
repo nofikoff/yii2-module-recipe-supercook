@@ -43,7 +43,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function ($model) {
                     $str = "";
                     foreach ($model->ingredients as $ingredient) {
-                        $str .= "- " . $ingredient->name . " " . ($ingredient->status ? "" : "<span style='color: red'>отключен</span>") . "<br>";
+                        $str .= "- <a href='/recipe/ingredient/update?id=$ingredient->id'>" . $ingredient->name . "</a> " . ($ingredient->status ? "" : "<span style='color: red'>отключен</span>") . "<br>";
 
                     }
                     return $str;

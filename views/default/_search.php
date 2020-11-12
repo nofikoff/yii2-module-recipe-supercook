@@ -15,44 +15,25 @@ use yii\widgets\ActiveForm;
         'action' => ['index'],
         'method' => 'get',
     ]);
-
     ?>
 
     <div class="row">
         <?php
-        //$listIdSearchIngredient
-        foreach ($listModelsIngredient as $key => $ingredient) {
+        for ($i = 0; $i < Yii::$app->getModule('recipe')->params['max_number_ingredients_one_dish']; $i++) {
+            echo '<div class="col-md-4">';
             echo $form
                 // присваиваем индекс полю атрибута т.к. здесь все обьекты с одинаковым и менем и атрибутом
-                ->field($ingredient, "ingredient_id[]", [])
+                ->field($model, "atr_interface_ingredient_id[]", [])
                 ->dropDownList(
                     $list_ingredients_id_name,
-                    //лайфхак - для режима UPDATE указываем какой параметр на до селектить
-                    ['prompt' => '-Select one-', 'options' => [$ingredient->ingredient_id => ["Selected" => true]]]
+                    //лайфхак - для режима UPDATE указываем какой параметр надо селектить
+                    ['prompt' => '-Select one-', 'options' => [$queryParams[$i] => ["Selected" => true]]]
                 )
-                ->label('Ingredient #' . ($key + 1));
+                ->label('Ingredient #' . ($i + 1));
+            echo '</div>';
         }
-
-        $oneIngredientModel
         ?>
-        <div class="col-md-3">
-<!--            --><?//=
-//            $form->field($model, 'education_id')
-//                ->dropDownList(
-//                    \yii\helpers\ArrayHelper::map(
-//                        \app\models\Education::find()
-//                            ->select('id, name_education')
-//                            ->all(),
-//                        'id',
-//                        'name_education'
-//                    ),
-//                    ['prompt' => '- не важно -']
-//                )
-//            ?>
-
-        </div>
     </div>
-
 
     <div class="form-group">
         <?= Html::submitButton('Искать', ['class' => 'btn btn-primary']) ?>

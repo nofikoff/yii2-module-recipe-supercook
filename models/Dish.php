@@ -16,6 +16,10 @@ use Yii;
  */
 class Dish extends \yii\db\ActiveRecord
 {
+
+    public $atr_interface_ingredient_id;
+
+
     /**
      * {@inheritdoc}
      */
@@ -34,6 +38,7 @@ class Dish extends \yii\db\ActiveRecord
             [['name'], 'string', 'max' => 100],
             [['photo'], 'string', 'max' => 200],
             [['name'], 'unique'],
+            [['atr_interface_ingredient_id'], 'safe'],
         ];
     }
 

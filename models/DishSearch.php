@@ -13,6 +13,8 @@ class DishSearch extends Dish
     /**
      * {@inheritdoc}
      */
+
+
     public function rules()
     {
         return [
@@ -48,17 +50,26 @@ class DishSearch extends Dish
 
         $this->load($params);
 
-
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
         }
 
-       // grid filtering conditions
+        // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
         ]);
+
+        $query->joinWith(['ingredients']);
+//        $query->andWhere(['ingredient.id' => 1]);
+
+        if (isset($params))
+            foreach ($params as $ingr) {
+                $query->orFilterWhere([
+                    'ingredient.id' => $ingr
+                ]);
+            }
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'photo', $this->photo]);
@@ -66,7 +77,6 @@ class DishSearch extends Dish
 
         return $dataProvider;
     }
-
 
 
 }
