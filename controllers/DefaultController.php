@@ -5,9 +5,12 @@ namespace app\modules\recipe\controllers;
 use app\modules\recipe\models\Dish;
 use app\modules\recipe\models\DishSearch;
 use app\modules\recipe\models\Ingredient;
+use app\modules\recipe\models\Ingredient2dish;
 use Yii;
+use yii\bootstrap\Html;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
+use yii\web\Response;
 
 /**
  * Default controller for the `recipe` module
@@ -20,74 +23,100 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-        $list_ingredients_id_name = Ingredient::find()->select(['name', 'id'])->indexBy('id')->andWhere(['status'=>'1'])->column();
+        $list_ingredients_id_name = Ingredient::find()->select(['name', 'id'])->indexBy('id')->andWhere(['status' => '1'])->column();
         return $this->render('index', [
             'list_ingredients_id_name' => $list_ingredients_id_name,
         ]);
     }
 
-    public function actionIndex2()
+    public function actionSearch()
     {
-        $dsplay_none = false;
-        $searchModel = new DishSearch();
-        $queryParams=[];
-        // валидация по клоичеству параметров
-//        if (isset(Yii::$app->request->queryParams['DishSearch']['atr_interface_ingredient_id'])) {
-//            $queryParams = array_unique(Yii::$app->request->queryParams['DishSearch']['atr_interface_ingredient_id']);
-//            $queryParams = array_filter($queryParams, function ($a) {
-//                return $a !== "";
-//            });
-//            if (sizeof($queryParams) < 2) {
-//                //error,danger,success,info,warning
-//                Yii::$app->session->setFlash('danger', "Укажите больше 1 ингредиента");
-//                $dsplay_none = true;
-//            }
-//        } else {
-//            $dsplay_none = true;
-//        }
-
-        // Если найдены блюда с полным совпадением ингредиентов вывести только их.
-        $dataProvider = $searchModel->searchCompleteMatch($queryParams);
-//        if (!$dataProvider->getTotalCount()) {
-//            // Если найдены блюда с частичным совпадением ингредиентов  вывести в порядке уменьшения
-//            // совпадения ингредиентов вплоть до 2х.
-//            $dataProvider = $searchModel->search($queryParams);
-//            //Если найдены блюда с совпадением менее чем 2 ингредиента или не найдены вовсе  вывести “Ничего не найдено”.
-//            if (!$dataProvider->getTotalCount()) {
-//                $dataProvider = $searchModel->search($queryParams);
-//            }
-//        }
-
-        // джойним с ингредиентами не активных (в серч модели уже есть)
-        // только те блюда у кого активные ингрдиенты - ДЛЯ ГЛАВНОЙ - Админу это условие НЕ надо
-        $dataProvider->query->andFilterWhere(
-            [
-                'not in', 'dish.id',
-                (Dish::find()
-                    ->select(['dish.id'])
-                    ->joinWith(['ingredients'])
-                    ->andFilterWhere(['ingredient.status' => 0])
-                )
-            ]);
-
-        // гасим виджет таблицы если выше приказали независимо от результата
-        /**if ($dsplay_none)
-         * $dataProvider->query->where('0=1');**/
-
-        // ничего не нашли
-        if (!$dataProvider->getTotalCount() and Yii::$app->request->get()) {
-            //error,danger,success,info,warning
-            Yii::$app->session->setFlash('warning', "Ничего не найдено");
+        if (!Yii::$app->request->isAjax) {
+            die("Ajax");
         }
-        //}
+
+        Yii::$app->response->format = Response::FORMAT_JSON;
+
+        $selected = \Yii::$app->request->post('selected');
+
+        //выбираем все блюда для текущего набора ингредиентов
+        $matches = Ingredient2dish::find()
+            //джойним три траблицы
+            ->select(['dish.name', 'ingredient2dish.dish_id', 'COUNT(ingredient.id) as MatchCount'])
+            ->leftJoin('ingredient', 'ingredient.id = ingredient2dish.ingredient_id')
+            ->leftJoin('dish', 'dish.id = ingredient2dish.dish_id')
+            // только текущий набор инг
+            ->andWhere(['in', 'ingredient_id', $selected])
+            // только активные инг
+            ->andWhere('ingredient.status = 1')
+            //группирум резуьлта по блюдам
+            ->groupBy('ingredient2dish.dish_id')
+            // только те блда где совпало от 2х инг
+            ->having('COUNT(ingredient_id)>=2')
+            // сортируем блюда по количеству совпавших инг
+            ->orderBy('MatchCount DESC')
+            ->asArray()
+            ->all();
+
+        // не менее 2з ингредиентов
+        if (sizeof($selected) < 2) {
+            return [
+                'status' => 'ok',
+                'result' => '<p class="text-warning">Выберите больше ингредиентов</p>'
+            ];
+        }
+
+        //пустой результат
+        if (empty($matches)) {
+            return [
+                'status' => 'ok',
+                'result' => '<p class="text-warning">Ничего не найдено</p>'
+            ];
+        }
+
+        $someMatches = [];
+        $exactMatch = [];
+
+        // переберм полученные блюда
+        foreach ($matches as $matchElement) {
+            $ingredientsArray = [];
+            $dishQuery = Ingredient::find()->joinWith('ingredient2dishes')->where(['dish_id' => $matchElement['dish_id']]);
+            // из чего найденное блюда
+            $ingredients_list = $dishQuery->all();
+            // сколько инг
+            $count = $dishQuery->count();
 
 
-        return $this->render('index', [
-            'queryParams' => $queryParams,
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-            'list_ingredients_id_name' => ArrayHelper::map(Ingredient::find()->orderBy('name')->asArray()->all(), 'id', 'name'),
+            foreach ($ingredients_list as $item) {
+                // не смотря на присутсвие в запрсе ingredient.status = 1
+                // пропускаем сразу блдюда с неативными инг
+                if (!$item->status) {
+                    //следующее блюдо
+                    continue 2;
+                }
 
-        ]);
+                $ingredientsArray[] = in_array($item->id, $selected) ?
+                    Html::tag('span', $item->name, ['class' => 'text-info'])
+                    :
+                    $item->name;
+            }
+
+            $ingredients = implode(', ', $ingredientsArray);
+            $name = $matchElement['name'] . ' [ совпадений: ' . $matchElement['MatchCount'] . ' ]';
+
+            $someMatches[$name] = $ingredients;
+            if ($matchElement['MatchCount'] == $count && $count == sizeof($selected)) {
+                $exactMatch[$name] = $ingredients;
+            }
+        }
+
+        // отрисовываем списко блюд
+        return [
+            'result' => $this->renderAjax('_item', [
+                'dishes' => (!empty($exactMatch)) ? $exactMatch : $someMatches,
+            ]),
+            'status' => 'ok'
+        ];
     }
+
 }

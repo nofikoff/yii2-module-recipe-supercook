@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'status',
                 'format' => 'raw',
                 'value' => function ($model) {
-                    return $model->status ? "" : "<span style='color: red'>ОТКЛЮЧЕН</span>";
+                    return $model->status ? "ok" : "<span style='color: red'>ОТКЛЮЧЕН</span>";
                 },
                 'filter' => [0 => 'отключен', 1 => 'включен'],
 

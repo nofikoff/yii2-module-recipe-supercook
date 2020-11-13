@@ -3,7 +3,7 @@
 use kartik\select2\Select2;
 use yii\bootstrap\Html;
 use yii\grid\GridView;
-use app\modules\recipe\RecipeAsset;
+use app\modules\recipe\assets\RecipeAsset;
 RecipeAsset::register($this);
 
 $this->title = 'Create Ingredient';

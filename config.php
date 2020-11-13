@@ -5,7 +5,7 @@ return [
         // list of component configurations
     ],
     'params' => [
-        'max_number_ingredients_one_dish' => 5,
+        'max_number_ingredients_one_dish' => 8,
 
     ],
 ];
