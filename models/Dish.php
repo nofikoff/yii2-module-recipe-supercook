@@ -2,7 +2,6 @@
 
 namespace app\modules\recipe\models;
 
-use Yii;
 
 /**
  * This is the model class for table "dish".

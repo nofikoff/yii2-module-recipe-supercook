@@ -1,7 +1,10 @@
 <?php
 
+use kartik\select2\Select2;
 use yii\bootstrap\Html;
 use yii\grid\GridView;
+use app\modules\recipe\RecipeAsset;
+RecipeAsset::register($this);
 
 $this->title = 'Create Ingredient';
 $this->params['breadcrumbs'][] = ['label' => 'Recipe search', 'url' => ['/recipe']];
@@ -31,45 +34,22 @@ $this->params['breadcrumbs'][] = ['label' => 'Recipe search', 'url' => ['/recipe
 <div class="dish-index">
 
 
-    <?php echo $this->render('_search',
-        [
-            'queryParams' => $queryParams,
-            'model' => $searchModel,
-            'list_ingredients_id_name' => $list_ingredients_id_name
-        ]);
-    ?>
-    <hr>
-    <?php
-    if ($dataProvider->getTotalCount())
-        echo GridView::widget([
-            'dataProvider' => $dataProvider,
-            'filterModel' => $searchModel,
-            'columns' => [
-                ['class' => 'yii\grid\SerialColumn'],
-
-                'name',
-
-
-                [
-                    'attribute' => 'ingredients',
-                    'format' => 'raw',
-                    'value' => function ($model) {
-                        $str = "";
-                        foreach ($model->ingredients as $ingredient) {
-                            $str .= "- " . $ingredient->name . " " . ($ingredient->status ? "" : "<span style='color: red'>отключен</span>") . "<br>";
-
-                        }
-                        return $str;
-                    },
-                    //                'contentOptions' => ['style' => 'min-width: 150px; max-width: 200px; '], // <-- right here
-                    'filter' => $list_ingredients_id_name,
-
-                ],
-
-
-            ],
-        ]);
+    <?php echo Select2::widget([
+        'name' => 'selected',
+        'language' => 'ru',
+        'id' => 'ingredient-select',
+        'data' => $list_ingredients_id_name,
+        'showToggleAll' => false,
+        'options' => ['placeholder' => 'Выберите ингредиент ...', 'multiple' => true],
+        'pluginOptions' => [
+            'allowClear' => true,
+            'maximumSelectionLength' => Yii::$app->getModule('recipe')->params['max_number_ingredients_one_dish'],
+        ],
+    ]);
 
 
     ?>
 </div>
+<div id="search-result"></div>
+
+

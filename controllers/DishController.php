@@ -3,8 +3,6 @@
 namespace app\modules\recipe\controllers;
 
 use app\modules\recipe\models\Ingredient;
-use app\modules\recipe\models\Ingredient2dish;
-use common\models\Ingredients;
 use Yii;
 use app\modules\recipe\models\Dish;
 use app\modules\recipe\models\DishSearch;

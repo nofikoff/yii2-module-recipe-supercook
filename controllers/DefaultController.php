@@ -5,7 +5,6 @@ namespace app\modules\recipe\controllers;
 use app\modules\recipe\models\Dish;
 use app\modules\recipe\models\DishSearch;
 use app\modules\recipe\models\Ingredient;
-use app\modules\recipe\models\Ingredient2dish;
 use Yii;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;
@@ -20,6 +19,14 @@ class DefaultController extends Controller
      * @return string
      */
     public function actionIndex()
+    {
+        $list_ingredients_id_name = Ingredient::find()->select(['name', 'id'])->indexBy('id')->andWhere(['status'=>'1'])->column();
+        return $this->render('index', [
+            'list_ingredients_id_name' => $list_ingredients_id_name,
+        ]);
+    }
+
+    public function actionIndex2()
     {
         $dsplay_none = false;
         $searchModel = new DishSearch();
