@@ -17,7 +17,7 @@ use Yii;
 class Dish extends \yii\db\ActiveRecord
 {
 
-    public $atr_interface_ingredient_id;
+    private $_ingredientsArray;
 
 
     /**
@@ -37,8 +37,8 @@ class Dish extends \yii\db\ActiveRecord
             [['name'], 'required'],
             [['name'], 'string', 'max' => 100],
             [['photo'], 'string', 'max' => 200],
-            [['name'], 'unique'],
-            [['atr_interface_ingredient_id'], 'safe'],
+            [['name'], 'unique', 'message' => 'Блюдо с таким названием уже существует'],
+            [['ingredientsArray'], 'safe'],
         ];
     }
 
@@ -73,5 +73,47 @@ class Dish extends \yii\db\ActiveRecord
     {
         return $this->hasMany(Ingredient::className(), ['id' => 'ingredient_id'])->viaTable('ingredient2dish', ['dish_id' => 'id']);
     }
+
+    public function afterSave($insert, $changedAttributes)
+    {
+        parent::afterSave($insert, $changedAttributes);
+        $this->updateIngredients();
+    }
+
+    private function updateIngredients()
+    {
+        $currentIngredientsIds = $this->getIngredients()->select('id')->column();
+        $newIngredientsIds = $this->getIngredientsArray();
+
+        foreach (array_filter(array_diff($newIngredientsIds, $currentIngredientsIds)) as $IngredientId) {
+            if ($Ingredient = Ingredient::findOne($IngredientId)) {
+                $this->link('ingredients', $Ingredient);
+            }
+        }
+
+        foreach (array_filter(array_diff($currentIngredientsIds, $newIngredientsIds)) as $IngredientId) {
+            if ($Ingredient = Ingredient::findOne($IngredientId)) {
+                $this->unlink('ingredients', $Ingredient, true);
+            }
+        }
+    }
+
+    public function getIngredientsArray()
+    {
+        if ($this->_ingredientsArray === null) {
+            $this->_ingredientsArray = $this->getIngredients()->select('id')->column();
+        }
+        return $this->_ingredientsArray;
+    }
+
+    public function setIngredientsArray($value)
+    {
+        $this->_ingredientsArray = (array)$value;
+
+    }
+
+
+
+
 
 }

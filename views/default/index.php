@@ -37,36 +37,38 @@ $this->params['breadcrumbs'][] = ['label' => 'Recipe search', 'url' => ['/recipe
             'model' => $searchModel,
             'list_ingredients_id_name' => $list_ingredients_id_name
         ]);
+    ?>
+    <hr>
+    <?php
+    if ($dataProvider->getTotalCount())
+        echo GridView::widget([
+            'dataProvider' => $dataProvider,
+            'filterModel' => $searchModel,
+            'columns' => [
+                ['class' => 'yii\grid\SerialColumn'],
+
+                'name',
 
 
-    echo GridView::widget([
-        'dataProvider' => $dataProvider,
-        'filterModel' => $searchModel,
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn'],
+                [
+                    'attribute' => 'ingredients',
+                    'format' => 'raw',
+                    'value' => function ($model) {
+                        $str = "";
+                        foreach ($model->ingredients as $ingredient) {
+                            $str .= "- " . $ingredient->name . " " . ($ingredient->status ? "" : "<span style='color: red'>отключен</span>") . "<br>";
 
-            'name',
+                        }
+                        return $str;
+                    },
+                    //                'contentOptions' => ['style' => 'min-width: 150px; max-width: 200px; '], // <-- right here
+                    'filter' => $list_ingredients_id_name,
 
+                ],
 
-            [
-                'attribute' => 'ingredients',
-                'format' => 'raw',
-                'value' => function ($model) {
-                    $str = "";
-                    foreach ($model->ingredients as $ingredient) {
-                        $str .= "- " . $ingredient->name . " " . ($ingredient->status ? "" : "<span style='color: red'>отключен</span>") . "<br>";
-
-                    }
-                    return $str;
-                },
-                //                'contentOptions' => ['style' => 'min-width: 150px; max-width: 200px; '], // <-- right here
-                'filter' => $list_ingredients_id_name,
 
             ],
-
-
-        ],
-    ]);
+        ]);
 
 
     ?>

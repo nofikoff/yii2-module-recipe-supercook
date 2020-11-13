@@ -21,21 +21,37 @@ class DefaultController extends Controller
      */
     public function actionIndex()
     {
-
-        // валидация по клоичеству параметров
-        if (isset(Yii::$app->request->queryParams['DishSearch']['atr_interface_ingredient_id'])) {
-            $queryParams = array_unique(Yii::$app->request->queryParams['DishSearch']['atr_interface_ingredient_id']);
-            $queryParams = array_filter($queryParams, function($a) {return $a !== "";});
-            //print_r($queryParams);
-            if (sizeof($queryParams) == 1) {
-                Yii::$app->session->setFlash('danger', "Укажите больше 1 ингредиента");
-            }
-        }
+        $dsplay_none = false;
         $searchModel = new DishSearch();
-        $dataProvider = $searchModel->search($queryParams);
+        $queryParams=[];
+        // валидация по клоичеству параметров
+//        if (isset(Yii::$app->request->queryParams['DishSearch']['atr_interface_ingredient_id'])) {
+//            $queryParams = array_unique(Yii::$app->request->queryParams['DishSearch']['atr_interface_ingredient_id']);
+//            $queryParams = array_filter($queryParams, function ($a) {
+//                return $a !== "";
+//            });
+//            if (sizeof($queryParams) < 2) {
+//                //error,danger,success,info,warning
+//                Yii::$app->session->setFlash('danger', "Укажите больше 1 ингредиента");
+//                $dsplay_none = true;
+//            }
+//        } else {
+//            $dsplay_none = true;
+//        }
 
-        // джойним с ингредиентами в поисках не активных (в серч модели уже есть)
-        //$dataProvider->query->joinWith(['ingredients']);
+        // Если найдены блюда с полным совпадением ингредиентов вывести только их.
+        $dataProvider = $searchModel->searchCompleteMatch($queryParams);
+//        if (!$dataProvider->getTotalCount()) {
+//            // Если найдены блюда с частичным совпадением ингредиентов  вывести в порядке уменьшения
+//            // совпадения ингредиентов вплоть до 2х.
+//            $dataProvider = $searchModel->search($queryParams);
+//            //Если найдены блюда с совпадением менее чем 2 ингредиента или не найдены вовсе  вывести “Ничего не найдено”.
+//            if (!$dataProvider->getTotalCount()) {
+//                $dataProvider = $searchModel->search($queryParams);
+//            }
+//        }
+
+        // джойним с ингредиентами не активных (в серч модели уже есть)
         // только те блюда у кого активные ингрдиенты - ДЛЯ ГЛАВНОЙ - Админу это условие НЕ надо
         $dataProvider->query->andFilterWhere(
             [
@@ -47,14 +63,16 @@ class DefaultController extends Controller
                 )
             ]);
 
-        // flash сообщение о результате поиска
-        if (Yii::$app->request->get()) {
+        // гасим виджет таблицы если выше приказали независимо от результата
+        /**if ($dsplay_none)
+         * $dataProvider->query->where('0=1');**/
 
-            if (!$dataProvider->getTotalCount()) {
-                //error,danger,success,info,warning
-                Yii::$app->session->setFlash('danger', "Ничего не найдено");
-            }
+        // ничего не нашли
+        if (!$dataProvider->getTotalCount() and Yii::$app->request->get()) {
+            //error,danger,success,info,warning
+            Yii::$app->session->setFlash('warning', "Ничего не найдено");
         }
+        //}
 
 
         return $this->render('index', [

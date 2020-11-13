@@ -4,6 +4,7 @@ namespace app\modules\recipe\controllers;
 
 use app\modules\recipe\models\Ingredient;
 use app\modules\recipe\models\Ingredient2dish;
+use common\models\Ingredients;
 use Yii;
 use app\modules\recipe\models\Dish;
 use app\modules\recipe\models\DishSearch;
@@ -85,33 +86,19 @@ class DishController extends Controller
      */
     public function actionCreate()
     {
-
         $model = new Dish();
-        // список моделей ингредиентов N штук по молчанию
-        for ($i = 0; $i < Yii::$app->getModule('recipe')->params['max_number_ingredients_one_dish']; $i++) {
-            $listModelsIngredient[] = new Ingredient2dish();
-        }
+        $model->loadDefaultValues();
+        $list_ingredients_id_name = Ingredient::find()->select(['name', 'id'])->indexBy('id')->andWhere(['status'=>'1'])->column();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            // орабатываем список НОВЫХ ингредиентов
-            foreach (Yii::$app->request->post('Ingredient2dish')['ingredient_id'] as $key => $ingradient_id) {
-                if ($ingradient_id) {
-                    $listModelsIngredient[$key]->dish_id = $model->id;
-                    $listModelsIngredient[$key]->ingredient_id = $ingradient_id;
-                    $listModelsIngredient[$key]->save();
-                }
-            }
-            //
             return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('create', [
+                'model' => $model,
+                'list_ingredients_id_name' => $list_ingredients_id_name
+            ]);
         }
-
-        $list_ingredients_id_name = ArrayHelper::map(Ingredient::find()->orderBy('name')->asArray()->all(), 'id', 'name');
-
-        return $this->render('create', [
-            'model' => $model,
-            'listModelsIngredient' => $listModelsIngredient,
-            'list_ingredients_id_name' => $list_ingredients_id_name,
-        ]);
     }
+
 
     /**
      * Updates an existing Dish model.
@@ -123,41 +110,17 @@ class DishController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-        // список моделей ингредиентов - только те что в наличии
-
-        // массив имеющихся моделей игредиентов для данного блюда
-        $listModelsIngredient = Ingredient2dish::find()->where(['dish_id' => $id])->All();
-        $find = sizeof($listModelsIngredient);
-        // список моделей ингредиентов N штук по молчанию пустых болванок
-        for ($i = 0; $i < (Yii::$app->getModule('recipe')->params['max_number_ingredients_one_dish'] - $find); $i++) {
-            $listModelsIngredient[] = new Ingredient2dish();
-        }
-
-        // обработчик
+        $list_ingredients_id_name = Ingredient::find()->select(['name', 'id'])->indexBy('id')->andWhere(['status'=>'1'])->column();
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            // сбрасываем старые ингредиенты
-            Yii::$app->db->createCommand("DELETE FROM `ingredient2dish` WHERE `dish_id` = " . $model->id)->execute();
-            // орабатываем список новых ингредиентов
-            foreach (Yii::$app->request->post('Ingredient2dish')['ingredient_id'] as $key => $ingradient_id) {
-                if ($ingradient_id) {
-                    $modelIngredient = new Ingredient2dish();
-                    $modelIngredient->dish_id = $model->id;
-                    $modelIngredient->ingredient_id = $ingradient_id;
-                    $modelIngredient->save();
-                }
-            }
-            //
             return $this->redirect(['view', 'id' => $model->id]);
+        } else {
+            return $this->render('update', [
+                'model' => $model,
+                'list_ingredients_id_name' => $list_ingredients_id_name,
+            ]);
         }
-
-        $list_ingredients_id_name = ArrayHelper::map(Ingredient::find()->orderBy('name')->asArray()->all(), 'id', 'name');
-
-        return $this->render('update', [
-            'model' => $model,
-            'listModelsIngredient' => $listModelsIngredient,
-            'list_ingredients_id_name' => $list_ingredients_id_name,
-        ]);
     }
+
 
     /**
      * Deletes an existing Dish model.

@@ -16,23 +16,26 @@ use yii\widgets\ActiveForm;
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
     <?php
-    // список моделей игредиентов для отображения в виде списка дропдаунов
-    if (isset($listModelsIngredient))
-        foreach ($listModelsIngredient as $key => $ingredient) {
-            echo $form
-                // присваиваем индекс полю, т.к. здесь все обьекты с одинаковым и менем и атрибутом
-                ->field($ingredient, "ingredient_id[]")
-                ->dropDownList(
-                    $list_ingredients_id_name,
-                    //лайфхак - для режима UPDATE указываем какой параметр на до селектить
-                    ['prompt' => '-Select one-', 'options' => [$ingredient->ingredient_id => ["Selected" => true]]]
-                )
-                ->label('Ingredient #' . ($key + 1));
-        }
+
+    echo $form->field($model, 'ingredientsArray')->widget(\kartik\select2\Select2::classname(), [
+        'name' => 'ingredients',
+        'language' => 'ru',
+        'value' => $model->ingredients, // initial value (will be ordered accordingly and pushed to the top)
+        'data' => $list_ingredients_id_name,
+        'maintainOrder' => true,
+        'showToggleAll' => false,
+        'toggleAllSettings' => [
+            'unselectLabel' => '<i class="glyphicon glyphicon-remove-sign"></i> Убрать все',
+            'unselectOptions' => ['class' => 'text-danger'],
+        ],
+        'options' => ['placeholder' => 'Выберите ингредиенты', 'multiple' => true],
+        'pluginOptions' => [
+            'tags' => false,
+            'maximumSelectionLength' => Yii::$app->getModule('recipe')->params['max_number_ingredients_one_dish'],
+        ],
+    ])->label('Ингредиенты');
     ?>
 
-
-    <!--    --><? //= $form->field($model, 'photo')->textInput(['maxlength' => true]) ?>
 
     <div class="form-group">
         <?= Html::submitButton('Save', ['class' => 'btn btn-success']) ?>
