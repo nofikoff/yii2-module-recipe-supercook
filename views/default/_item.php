@@ -1,6 +1,8 @@
 <?php
-if (!empty($dishes))
+if (!empty($dishes)) {
+    echo "<h3>$comment:</h3>";
     foreach ($dishes as $name => $ingredients) {
-        echo "<h3>$name</h3>";
+        echo "<h4>$name</h4>";
         echo "<p>$ingredients</p>";
     }
+}

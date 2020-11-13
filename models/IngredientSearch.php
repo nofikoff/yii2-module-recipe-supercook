@@ -60,7 +60,6 @@ class IngredientSearch extends Ingredient
         $query->andFilterWhere([
             'id' => $this->id,
             'status' => $this->status,
-
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])

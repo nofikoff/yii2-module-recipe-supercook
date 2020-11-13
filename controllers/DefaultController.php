@@ -87,6 +87,7 @@ class DefaultController extends Controller
             $count = $dishQuery->count();
 
 
+            // перебираем инг в массив $ingredientsArray
             foreach ($ingredients_list as $item) {
                 // не смотря на присутсвие в запрсе ingredient.status = 1
                 // пропускаем сразу блдюда с неативными инг
@@ -95,6 +96,7 @@ class DefaultController extends Controller
                     continue 2;
                 }
 
+                //подкраишваем список инг
                 $ingredientsArray[] = in_array($item->id, $selected) ?
                     Html::tag('span', $item->name, ['class' => 'text-info'])
                     :
@@ -113,7 +115,9 @@ class DefaultController extends Controller
         // отрисовываем списко блюд
         return [
             'result' => $this->renderAjax('_item', [
+                // если точных совпадений нет - выводим частичные
                 'dishes' => (!empty($exactMatch)) ? $exactMatch : $someMatches,
+                'comment' => (!empty($exactMatch)) ? 'Точное совпадение' : 'Частичное совпадение',
             ]),
             'status' => 'ok'
         ];
