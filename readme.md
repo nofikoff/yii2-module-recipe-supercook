@@ -1,6 +1,6 @@
 
 # УСТАНОВКА
-composer require nofikoff/supercook
+composer require nofikoff/supercook:dev-master
 
 Добавить в конфиг блока modules
 ...
@@ -10,7 +10,7 @@ composer require nofikoff/supercook
         ],
     ],
 ...
-## Выполнитье миграцию:
+## Выполнить миграцию:
 yii migrate/up --migrationPath=@app/modules/recipe/migrations
 
 # ЗАДАНИЕ
