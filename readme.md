@@ -6,7 +6,7 @@ composer require nofikoff/supercook
 ```
     'modules' => [
         'recipe' => [
-            'class' => '@vendor\nofikoff\recipe\Recipe',
+            'class' => '@vendor\nofikoff\recipe',
         ],
     ],
 ```
