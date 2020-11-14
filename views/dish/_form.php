@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\recipe\models\Dish */
+/* @var $model nofikoff\supercook\models\Dish */
 /* @var $form yii\widgets\ActiveForm */
 
 ?>

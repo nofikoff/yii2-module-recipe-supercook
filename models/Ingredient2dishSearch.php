@@ -1,13 +1,13 @@
 <?php
 
-namespace app\modules\recipe\models;
+namespace nofikoff\supercook\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\modules\recipe\models\Ingredient2dish;
+use nofikoff\supercook\models\Ingredient2dish;
 
 /**
- * Ingredient2dishSearch represents the model behind the search form of `app\modules\recipe\models\Ingredient2dish`.
+ * Ingredient2dishSearch represents the model behind the search form of `nofikoff\supercook\models\Ingredient2dish`.
  */
 class Ingredient2dishSearch extends Ingredient2dish
 {

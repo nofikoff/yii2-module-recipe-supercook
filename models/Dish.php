@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\recipe\models;
+namespace nofikoff\supercook\models;
 
 
 /**

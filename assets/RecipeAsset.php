@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\recipe\assets;
+namespace nofikoff\supercook\assets;
 
 use yii\web\AssetBundle;
 

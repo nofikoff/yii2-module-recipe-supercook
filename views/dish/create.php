@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\recipe\models\Dish */
+/* @var $model nofikoff\supercook\models\Dish */
 
 $this->title = 'Create Dish';
 $this->params['breadcrumbs'][] = ['label' => 'Recipe search', 'url' => ['/recipe']];

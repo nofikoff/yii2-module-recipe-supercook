@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\modules\recipe\models\DishSearch */
+/* @var $searchModel nofikoff\supercook\models\DishSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Dishes';

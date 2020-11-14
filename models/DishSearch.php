@@ -1,12 +1,12 @@
 <?php
 
-namespace app\modules\recipe\models;
+namespace nofikoff\supercook\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 
 /**
- * DishSearch represents the model behind the search form of `app\modules\recipe\models\Dish`.
+ * DishSearch represents the model behind the search form of `nofikoff\supercook\models\Dish`.
  */
 class DishSearch extends Dish
 {

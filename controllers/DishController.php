@@ -1,11 +1,11 @@
 <?php
 
-namespace app\modules\recipe\controllers;
+namespace nofikoff\supercook\controllers;
 
-use app\modules\recipe\models\Ingredient;
+use nofikoff\supercook\models\Ingredient;
 use Yii;
-use app\modules\recipe\models\Dish;
-use app\modules\recipe\models\DishSearch;
+use nofikoff\supercook\models\Dish;
+use nofikoff\supercook\models\DishSearch;
 use yii\filters\AccessControl;
 use yii\helpers\ArrayHelper;
 use yii\web\Controller;

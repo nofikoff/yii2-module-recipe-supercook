@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\modules\recipe\models\Ingredient */
+/* @var $model nofikoff\supercook\models\Ingredient */
 
 $this->title = 'Create Ingredient';
 $this->params['breadcrumbs'][] = ['label' => 'Recipe search', 'url' => ['/recipe']];
