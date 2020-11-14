@@ -1,12 +1,11 @@
 
 # УСТАНОВКА
-composer require nofikoff/supercook
 
 Добавить в конфиг блока modules
 ```
     'modules' => [
         'recipe' => [
-            'class' => '@vendor\nofikoff\recipe',
+            'class' => 'app\modules\recipe\Recipe',
         ],
     ],
 ```
