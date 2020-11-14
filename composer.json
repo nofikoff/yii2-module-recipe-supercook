@@ -3,6 +3,6 @@
   "description": "Тестовое задание",
   "require": {
     "php": "^7.2",
-    "kartik-v/yii2-widget-select2": "v2.2.0"
+    "kartik-v/yii2-widget-select2": "*"
   }
 }
