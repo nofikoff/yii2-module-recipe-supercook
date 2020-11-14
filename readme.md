@@ -1,3 +1,18 @@
+
+# УСТАНОВКА
+composer require nofikoff/supercook
+
+Добавить в конфиг блока modules
+...
+    'modules' => [
+        'recipe' => [
+            'class' => 'app\modules\recipe\Recipe',
+        ],
+    ],
+...
+## Выполнитье миграцию:
+yii migrate/up --migrationPath=@app/modules/recipe/migrations
+
 # ЗАДАНИЕ
 Создать модуль выборки блюд по заданным пользователем ингредиентам. Административная часть:
 
@@ -31,20 +46,6 @@ CRUD формирования блюд из этих ингредиентов.
 - Search Model блюд на главной. MySQL запросы и проверки (30 мин)
 - Тестирование (10 мин)
 - Обернуть в модуль
-
-# УСТАНОВКА
-Добавить в конфиг блока modules
-...
-    'modules' => [
-        'recipe' => [
-            'class' => 'app\modules\recipe\Recipe',
-        ],
-    ],
-...
-## Выполнитье миграцию:
-yii migrate/up --migrationPath=@app/modules/recipe/migrations
-
-
 
 
 
