@@ -5,7 +5,9 @@ https://recipe.protection.com.ua/
 
 # УСТАНОВКА МОДУЛЯ
 
-Добавить в конфиг блока modules
+- Модуль разместить в папке @app\modules\recipe\
+- Добавить зависимость composer require kartik-v/yii2-widget-select2
+- Добавить в конфиг блока modules
 ```
     'modules' => [
         'recipe' => [
