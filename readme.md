@@ -3,7 +3,7 @@
 https://recipe.protection.com.ua/
 
 
-# УСТАНОВКА
+# УСТАНОВКА МОДУЛЯ
 
 Добавить в конфиг блока modules
 ```
@@ -13,7 +13,7 @@ https://recipe.protection.com.ua/
         ],
     ],
 ```
-## Выполнить миграцию:
+## Выполнить миграцию: ##
 yii migrate/up --migrationPath=@app/modules/recipe/migrations
 
 # ЗАДАНИЕ
@@ -48,7 +48,7 @@ CRUD формирования блюд из этих ингредиентов.
 - Подключение JS в assets модуля (10 мин)
 - Search Model блюд на главной. MySQL запросы и проверки (30 мин)
 - Тестирование (10 мин)
-- Обернуть в модуль
+
 
 
 
