@@ -1,4 +1,8 @@
 
+# ДЕМО
+https://recipe.protection.com.ua/
+
+
 # УСТАНОВКА
 
 Добавить в конфиг блока modules
