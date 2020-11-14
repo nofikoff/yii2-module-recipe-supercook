@@ -3,13 +3,13 @@
 composer require nofikoff/supercook:dev-master
 
 Добавить в конфиг блока modules
-...
+```
     'modules' => [
         'recipe' => [
             'class' => 'app\modules\recipe\Recipe',
         ],
     ],
-...
+```
 ## Выполнить миграцию:
 yii migrate/up --migrationPath=@app/modules/recipe/migrations
 
