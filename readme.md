@@ -1,6 +1,6 @@
 
 # УСТАНОВКА
-composer require nofikoff/supercook:v0.2
+composer require nofikoff/supercook
 
 Добавить в конфиг блока modules
 ```
@@ -11,7 +11,7 @@ composer require nofikoff/supercook:v0.2
     ],
 ```
 ## Выполнить миграцию:
-yii migrate/up --migrationPath=@app/modules/recipe/migrations
+yii migrate/up --migrationPath=@app/vendor/nofikoff/supercook/migrations
 
 # ЗАДАНИЕ
 Создать модуль выборки блюд по заданным пользователем ингредиентам. Административная часть:
