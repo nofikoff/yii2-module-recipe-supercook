@@ -3,8 +3,6 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 
-/* @var $this yii\web\View */
-/* @var $model nofikoff\supercook\models\Ingredient */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Recipe search', 'url' => ['/recipe']];

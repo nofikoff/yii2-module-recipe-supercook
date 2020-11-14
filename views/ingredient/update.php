@@ -2,8 +2,6 @@
 
 use yii\helpers\Html;
 
-/* @var $this yii\web\View */
-/* @var $model nofikoff\supercook\models\Ingredient */
 
 $this->title = 'Update Ingredient: ' . $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Recipe search', 'url' => ['/recipe']];

@@ -1,6 +1,6 @@
 {
   "name": "nofikoff/supercook",
-  "description": "Тестовое задание",
+  "description": "База рецептов",
   "require": {
     "php": "^7.2",
     "kartik-v/yii2-widget-select2": "*"

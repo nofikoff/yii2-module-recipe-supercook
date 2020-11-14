@@ -14,7 +14,7 @@ https://recipe.protection.com.ua/
     ],
 ```
 ## Выполнить миграцию:
-yii migrate/up --migrationPath=@app/vendor/nofikoff/supercook/migrations
+yii migrate/up --migrationPath=@app/modules/recipe/migrations
 
 # ЗАДАНИЕ
 Создать модуль выборки блюд по заданным пользователем ингредиентам. Административная часть:

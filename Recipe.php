@@ -1,6 +1,6 @@
 <?php
 
-namespace nofikoff\supercook;
+namespace app\modules\recipe;
 
 /**
  * recipe module definition class
@@ -10,7 +10,7 @@ class Recipe extends \yii\base\Module
     /**
      * {@inheritdoc}
      */
-    public $controllerNamespace = 'nofikoff\supercook\controllers';
+    public $controllerNamespace = 'app\modules\recipe\controllers';
 
     /**
      * {@inheritdoc}

@@ -1,10 +1,10 @@
 <?php
 
-namespace nofikoff\supercook\controllers;
+namespace app\modules\recipe\controllers;
 
 use Yii;
-use nofikoff\supercook\models\Ingredient2dish;
-use nofikoff\supercook\models\Ingredient2dishSearch;
+use app\modules\recipe\models\Ingredient2dish;
+use app\modules\recipe\models\Ingredient2dishSearch;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
