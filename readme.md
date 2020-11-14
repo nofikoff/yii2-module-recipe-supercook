@@ -1,6 +1,6 @@
 
 # УСТАНОВКА
-composer require nofikoff/supercook:dev-master
+composer require nofikoff/supercook:v0.2
 
 Добавить в конфиг блока modules
 ```
